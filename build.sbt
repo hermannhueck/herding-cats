@@ -12,13 +12,15 @@ val specs2Version = "3.8.9" // use the version used by discipline
 val specs2Core  = "org.specs2" %% "specs2-core" % specs2Version
 val specs2Scalacheck = "org.specs2" %% "specs2-scalacheck" % specs2Version
 val scalacheck = "org.scalacheck" %% "scalacheck" % "1.12.4"
+val discipline = "org.typelevel" %% "discipline" % "0.9.0"
+val catsLaws = "org.typelevel" %% "cats-laws" % catsVersion
 
 lazy val packageSite = taskKey[Unit]("package site")
 lazy val doPackageSite = taskKey[File]("package site")
 lazy val packageSitePath = settingKey[File]("path for the package")
 
 lazy val root = (project in file(".")).
-  enablePlugins(PamfletPlugin).
+  // enablePlugins(PamfletPlugin).
   settings(
     organization := "com.eed3si9n",
     name := "herding-cats",
@@ -28,8 +30,14 @@ lazy val root = (project in file(".")).
       catsFree,
       catsMtl,
       simulacrum,
-      specs2Core % Test, specs2Scalacheck % Test, scalacheck % Test,
-      macroParadise, kindProjector, resetAllAttrs
+      specs2Core % Test,
+      specs2Scalacheck % Test,
+      scalacheck % Test,
+      discipline % Test,
+      catsLaws, // % Test,
+      macroParadise,
+      kindProjector,
+      resetAllAttrs
     ),
     scalacOptions ++= Seq(
       "-deprecation",
@@ -42,14 +50,14 @@ lazy val root = (project in file(".")).
       Resolver.sonatypeRepo("releases"),
       Resolver.sonatypeRepo("snapshots")
     )
-  ).settings(
-    packageSitePath := target.value / "herding-cats.tar.gz",
-    doPackageSite := {
-      val out = packageSitePath.value
-      val siteDir = (target in (Pamflet, pfWrite)).value
-      val items = ((siteDir ** "*").get map { _.relativeTo(siteDir) }).flatten
-      Process(s"""tar zcf ${ packageSitePath.value.getAbsolutePath } ${ items.mkString(" ") }""", Some(siteDir)).!
-      out
-    },
-    packageSite := Def.sequential(/*clean,*/ pfWrite, doPackageSite).value
+//  ).settings(
+//    packageSitePath := target.value / "herding-cats.tar.gz",
+//    doPackageSite := {
+//      val out = packageSitePath.value
+//      val siteDir = (target in (Pamflet, pfWrite)).value
+//      val items = ((siteDir ** "*").get map { _.relativeTo(siteDir) }).flatten
+//      Process(s"""tar zcf ${ packageSitePath.value.getAbsolutePath } ${ items.mkString(" ") }""", Some(siteDir)).!
+//      out
+//    },
+//    packageSite := Def.sequential(/*clean,*/ pfWrite, doPackageSite).value
   )
