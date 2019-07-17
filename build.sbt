@@ -1,17 +1,17 @@
-val catsVersion = "1.0.1"
+val catsVersion = "1.0.1" // now 1.1.1 at 2018-05-22
 val catsCore = "org.typelevel" %% "cats-core" % catsVersion
 val catsFree = "org.typelevel" %% "cats-free" % catsVersion
-val catsMtl = "org.typelevel" %% "cats-mtl-core" % "0.2.1"
+val catsMtl = "org.typelevel" %% "cats-mtl-core" % "0.2.3"
 
 val simulacrum = "com.github.mpilquist" %% "simulacrum" % "0.11.0"
-val macroParadise = compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
-val kindProjector = compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
+val macroParadise = compilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
+val kindProjector = compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
 val resetAllAttrs = "org.scalamacros" %% "resetallattrs" % "1.0.0"
 
-val specs2Version = "3.8.9" // use the version used by discipline
+val specs2Version = "4.2.0" // use the version used by discipline
 val specs2Core  = "org.specs2" %% "specs2-core" % specs2Version
 val specs2Scalacheck = "org.specs2" %% "specs2-scalacheck" % specs2Version
-val scalacheck = "org.scalacheck" %% "scalacheck" % "1.12.4"
+val scalacheck = "org.scalacheck" %% "scalacheck" % "1.14.0"
 val discipline = "org.typelevel" %% "discipline" % "0.9.0"
 val catsLaws = "org.typelevel" %% "cats-laws" % catsVersion
 
@@ -24,7 +24,13 @@ lazy val root = (project in file(".")).
   settings(
     organization := "com.eed3si9n",
     name := "herding-cats",
-    scalaVersion := "2.12.4",
+    scalaVersion := "2.12.6",
+
+    initialCommands in console :=
+      """import cats._
+        |import cats.data._
+        |import cats.implicits._""".stripMargin,
+
     libraryDependencies ++= Seq(
       catsCore,
       catsFree,
